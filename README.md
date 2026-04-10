@@ -7,15 +7,16 @@
 ## 📋 Daftar Isi
 
 1. [Requirement / Kebutuhan Sistem](#-1-requirement--kebutuhan-sistem)
-2. [Struktur Proyek](#-2-struktur-proyek)
-3. [Konfigurasi Database](#-3-konfigurasi-database)
-4. [Instalasi Backend (Laravel)](#-4-instalasi-backend-laravel)
-5. [Instalasi Frontend (React)](#-5-instalasi-frontend-react)
-6. [Menjalankan Aplikasi](#-6-menjalankan-aplikasi)
-7. [Login Pertama Kali](#-7-login-pertama-kali)
-8. [Fitur yang Tersedia](#-8-fitur-yang-tersedia)
-9. [Panduan Pengembangan Lanjutan](#-9-panduan-pengembangan-lanjutan)
-10. [Troubleshooting](#-10-troubleshooting)
+2. [Cara Cepat Menggunakan (Clone Repo)](#-2-cara-cepat-menggunakan-clone-repo)
+3. [Struktur Proyek](#-3-struktur-proyek)
+4. [Konfigurasi Database](#-4-konfigurasi-database)
+5. [Instalasi Backend (Laravel)](#-5-instalasi-backend-laravel)
+6. [Instalasi Frontend (React)](#-6-instalasi-frontend-react)
+7. [Menjalankan Aplikasi](#-7-menjalankan-aplikasi)
+8. [Login Pertama Kali](#-8-login-pertama-kali)
+9. [Fitur yang Tersedia](#-9-fitur-yang-tersedia)
+10. [Panduan Pengembangan Lanjutan](#-10-panduan-pengembangan-lanjutan)
+11. [Troubleshooting](#-11-troubleshooting)
 
 ---
 
@@ -47,19 +48,55 @@ npm -v          # 9.x atau lebih
 
 ---
 
-## 📁 2. Struktur Proyek
+## 🚀 2. Cara Cepat Menggunakan (Clone Repo)
+
+Jika Anda ingin langsung menggunakan StarterPack ini di komputer Anda, ikuti langkah-langkah berikut:
+
+### Langkah 1 – Clone Repository
+Buka Terminal/CMD Anda, lalu jalankan:
+```bash
+# Masuk ke folder htdocs XAMPP (atau folder project Anda)
+cd /path/ke/htdocs
+
+# Clone repository
+git clone https://github.com/abangelan/starterpack.git
+
+# Masuk ke folder proyek
+cd starterpack
+```
+
+### Langkah 2 – Persiapan Backend
+```bash
+cd backend
+composer install
+cp .env.example .env
+php artisan key:generate
+```
+*Catatan: Sesuaikan detail database di `.env` sebelum lanjut ke migrasi.*
+
+### Langkah 3 – Persiapan Frontend
+```bash
+cd ../frontend
+npm install --legacy-peer-deps
+```
+
+---
+
+## 📁 3. Struktur Proyek
+
+Setelah Anda melakukan clone, folder utama proyek akan memiliki struktur sebagai berikut:
 
 ```
 starterpack/
 ├── frontend/              ← React App (berjalan di port 3000)
 ├── backend/               ← Laravel REST API
-├── Tutorial.md            ← File Panduan Lengkap
-└── prd.md                 ← Product Requirements Document
+├── prd.md                 ← Product Requirements Document
+└── Tutorial.md            ← File Panduan Lengkap
 ```
 
 ---
 
-## 🗄️ 3. Konfigurasi Database
+## 🗄️ 4. Konfigurasi Database
 
 ### Langkah 1 – Aktifkan XAMPP
 
@@ -76,22 +113,9 @@ Buka **XAMPP Control Panel** dan aktifkan:
 4. Pilih collation: `utf8mb4_unicode_ci`
 5. Klik **Create**
 
-**Cara B – via Terminal:**
-```bash
-# Windows (XAMPP)
-C:\xampp\mysql\bin\mysql.exe -u root -p
-
-# macOS (XAMPP)
-/Applications/XAMPP/xamppfiles/bin/mysql -u root -p
-
-# Setelah masuk prompt MySQL:
-CREATE DATABASE starterpack_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-EXIT;
-```
-
 ---
 
-## 🔧 4. Instalasi Backend (Laravel)
+## 🔧 5. Instalasi Backend (Laravel)
 
 ### Langkah 1 – Salin folder ke htdocs
 
@@ -135,17 +159,12 @@ DB_PORT=3306
 DB_DATABASE=starterpack_db
 DB_USERNAME=root
 DB_PASSWORD=           ← Kosongkan jika XAMPP default (tanpa password)
-
-SANCTUM_STATEFUL_DOMAINS=localhost:3000,localhost
-FRONTEND_URL=http://localhost:3000
 ```
-
-> ⚠️ **Penting untuk Windows**: Ganti separator path di `APP_URL` jika perlu. Jika XAMPP MySQL Anda menggunakan password, isi `DB_PASSWORD`.
 
 ### Langkah 4 – Generate App Key & Migrasi
 
 ```bash
-# Generate application key (WAJIB dilakukan setiap clone/copy baru)
+# Generate application key
 php artisan key:generate
 
 # Jalankan migrasi — membuat semua tabel di database
@@ -161,11 +180,9 @@ Output yang diharapkan:
 🔑 Login: admin@starterpack.com / password
 ```
 
-> ⚠️ **Jika migrate gagal**: Pastikan database `starterpack_db` sudah dibuat dan konfigurasi `.env` sudah benar.
-
 ---
 
-## ⚛️ 5. Instalasi Frontend (React)
+## ⚛️ 6. Instalasi Frontend (React)
 
 ### Langkah 1 – Masuk ke folder `frontend/`
 
@@ -179,47 +196,25 @@ cd /path/ke/starterpack/frontend
 npm install --legacy-peer-deps
 ```
 
-> ⏳ Proses ini memerlukan koneksi internet dan membutuhkan beberapa menit.  
-> Flag `--legacy-peer-deps` diperlukan karena beberapa paket WowDash template menggunakan versi peer dependency yang lama.
-
-### Langkah 3 – Konfigurasi `.env` Frontend
-
-Buka file `frontend/.env` dan pastikan URL backend sudah benar:
-
-```env
-NODE_PATH=./src
-REACT_APP_API_URL=http://localhost/starterpack/backend/public/api
-```
-
-> **Jika backend pakai `php artisan serve` (port 8000):**
-> ```env
-> REACT_APP_API_URL=http://localhost:8000/api
-> ```
-
 ---
 
-## ▶️ 6. Menjalankan Aplikasi
+## ▶️ 7. Menjalankan Aplikasi
 
 ### Jalankan Backend
 
 **Pilihan A – Via XAMPP Apache (Direkomendasikan):**
 - Pastikan **Apache** & **MySQL** di XAMPP sudah `Start`
-- Backend otomatis tersedia di:
-  ```
-  http://localhost/starterpack/backend/public/api
-  ```
-- Tidak butuh command tambahan ✅
+- Backend otomatis tersedia di: `http://localhost/starterpack/backend/public/api`
 
 **Pilihan B – Via `php artisan serve`:**
 ```bash
 cd /path/ke/starterpack/backend
 php artisan serve --port=8000
 ```
-*(Jika pakai pilihan ini, ubah `REACT_APP_API_URL` di `frontend/.env` ke `http://localhost:8000/api`)*
 
 ### Jalankan Frontend (React Dev Server)
 
-Buka terminal **baru** (jangan tutup terminal backend):
+Buka terminal **baru**:
 
 ```bash
 cd /path/ke/starterpack/frontend
@@ -228,214 +223,42 @@ npm start
 
 Browser akan otomatis terbuka di **`http://localhost:3000`**
 
-Jika tidak otomatis, buka manual di browser.
-
 ---
 
-## 🔑 7. Login Pertama Kali
+## 🔑 8. Login Pertama Kali
 
-1. Buka browser → **`http://localhost:3000`**
-2. Akan otomatis redirect ke halaman **Sign In**
-3. Masukkan kredensial default:
+Masukkan kredensial default:
 
 | Field | Nilai |
 |-------|-------|
 | **Email** | `admin@starterpack.com` |
 | **Password** | `password` |
 
-4. Klik tombol **Masuk**
-5. Anda masuk ke **Dashboard** utama 🎉
-
-### Akun Sample yang Tersedia
-
-| Email | Password | Role | Status |
-|-------|----------|------|--------|
-| `admin@starterpack.com` | `password` | Super Admin | Aktif |
-| `admin2@starterpack.com` | `password` | Admin | Aktif |
-| `user@starterpack.com` | `password` | User | Aktif |
-| `inactive@starterpack.com` | `password` | User | Nonaktif |
-
-> ⚠️ **Segera ganti password** admin setelah login pertama untuk keamanan sistem.
-
 ---
 
-## ✨ 8. Fitur yang Tersedia
+## ✨ 9. Fitur yang Tersedia
 
 ### 🏠 Dashboard
-- 11 variasi tampilan dashboard (tersedia di menu sidebar)
-- Semua halaman dilindungi — harus login terlebih dahulu
+- 11 variasi tampilan dashboard
+- Proteksi halaman (harus login)
 
 ### 👥 Manajemen Pengguna (`/user-management`)
-
-| Fitur | Keterangan |
-|-------|-----------|
-| 📋 Lihat Daftar | Tabel pengguna: Nama, Email, Role, Status |
-| 🔍 Pencarian | Real-time cari berdasarkan nama atau email |
-| 🎭 Filter Role | Filter berdasarkan role yang dipilih |
-| 🔘 Filter Status | Filter berdasarkan Aktif / Nonaktif |
-| 📄 Per Halaman | Pilih 10 / 25 / 50 / 100 data per halaman |
-| ➕ Tambah | Form modal: nama, email, password, role, status |
-| ✏️ Edit | Form modal prefilled, password opsional saat edit |
-| 🗑️ Hapus | Konfirmasi sebelum dihapus permanen |
-| 📊 Export Excel | Download `.xlsx` sesuai filter aktif |
-| 📄 Export PDF | Download `.pdf` sesuai filter aktif |
+CRUD lengkap, Search, Filter Role/Status, Pagination, dan Export Excel/PDF.
 
 ### 🛡️ Manajemen Role (`/role-management`)
-
-| Fitur | Keterangan |
-|-------|-----------|
-| 📋 Lihat Daftar | Tabel role: Nama, Deskripsi, Jumlah User, Status |
-| 🔍 Pencarian | Cari berdasarkan nama role |
-| 🔘 Filter Status | Filter Aktif / Nonaktif |
-| ➕ Tambah | Form modal: nama, deskripsi, status |
-| ✏️ Edit | Update nama, deskripsi, status |
-| 🗑️ Hapus | Tidak bisa hapus jika masih digunakan user |
-| 📊 Export Excel | Download `.xlsx` |
-| 📄 Export PDF | Download `.pdf` |
-
-### 🔐 Autentikasi
-- Login dengan email + password
-- Token tersimpan di localStorage (Sanctum Token)
-- Semua halaman protected (auto-redirect ke login jika belum masuk)
-- Logout via tombol di navbar kanan atas
-- Nama pengguna ditampilkan di navbar
+CRUD lengkap, Search, Filter Status, dan Export Excel/PDF.
 
 ---
 
-## 🛠️ 9. Panduan Pengembangan Lanjutan
+## 🛠️ 10. Panduan Pengembangan Lanjutan
 
-### Menambah Halaman Baru
-
-**Langkah 1 – Buat komponen layer:**
-```jsx
-// src/components/ContohLayer.jsx
-const ContohLayer = () => {
-  return (
-    <div className="card h-100 p-0 radius-12">
-      <div className="card-header">
-        <h5 className="mb-0">Halaman Baru</h5>
-      </div>
-      <div className="card-body">
-        Isi konten halaman baru di sini
-      </div>
-    </div>
-  );
-};
-export default ContohLayer;
-```
-
-**Langkah 2 – Buat page wrapper:**
-```jsx
-// src/pages/ContohPage.jsx
-import MasterLayout from "../masterLayout/MasterLayout";
-import Breadcrumb from "../components/Breadcrumb";
-import ContohLayer from "../components/ContohLayer";
-
-const ContohPage = () => (
-  <MasterLayout>
-    <Breadcrumb title="Judul Halaman" />
-    <ContohLayer />
-  </MasterLayout>
-);
-export default ContohPage;
-```
-
-**Langkah 3 – Daftarkan route di `App.js`:**
-```jsx
-import ContohPage from "./pages/ContohPage";
-
-// Di dalam <Routes>:
-<Route exact path='/contoh'
-  element={<PrivateRoute><ContohPage /></PrivateRoute>}
-/>
-```
-
-**Langkah 4 – Tambah menu di sidebar (`MasterLayout.jsx`):**
-```jsx
-<li>
-  <NavLink
-    to='/contoh'
-    className={(navData) => (navData.isActive ? "active-page" : "")}
-  >
-    <Icon icon="solar:document-bold-duotone" className='menu-icon' />
-    <span>Contoh Menu</span>
-  </NavLink>
-</li>
-```
-
-### Menambah Endpoint API Baru (Backend)
-
-**Langkah 1 – Buat Controller:**
-```bash
-php artisan make:controller Api/ContohController --api
-```
-
-**Langkah 2 – Tambah route di `backend/routes/api.php`:**
-```php
-Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('/contoh', ContohController::class);
-});
-```
-
-**Langkah 3 – Buat API call di frontend (`src/api/contoh.js`):**
-```js
-import axiosInstance from "./axios";
-
-export const getContohApi = (params) =>
-  axiosInstance.get("/contoh", { params });
-
-export const createContohApi = (data) =>
-  axiosInstance.post("/contoh", data);
-
-export const updateContohApi = (id, data) =>
-  axiosInstance.put(`/contoh/${id}`, data);
-
-export const deleteContohApi = (id) =>
-  axiosInstance.delete(`/contoh/${id}`);
-```
-
-### Mengubah Konfigurasi untuk Production / Domain Lain
-
-Edit `frontend/.env`:
-```env
-REACT_APP_API_URL=https://domain-anda.com/backend/public/api
-```
-
-Edit `backend/.env`:
-```env
-APP_URL=https://domain-anda.com/backend/public
-SANCTUM_STATEFUL_DOMAINS=domain-anda.com
-FRONTEND_URL=https://domain-anda.com
-```
-
-Edit `backend/config/cors.php`:
-```php
-'allowed_origins' => ['https://domain-anda.com'],
-```
+Tersedia di file `Tutorial.md` lengkap untuk cara menambah halaman, endpoint API, dan konfigurasi produksi.
 
 ---
 
-## 🐛 10. Troubleshooting
+## 🐛 11. Troubleshooting
 
-### ❌ `Failed to compile` — Module not found: axios
-```bash
-cd frontend
-npm install axios --legacy-peer-deps
-```
-
----
-
-## 📌 Quick Reference – Perintah Penting
-
-```bash
-# ============ BACKEND ============
-php artisan migrate:fresh --seed
-php artisan serve --port=8000
-
-# ============ FRONTEND ============
-npm install --legacy-peer-deps
-npm start
-```
+Jika mengalami kendala, silakan cek bagian **Troubleshooting** di file `Tutorial.md` atau pastikan versi PHP dan Node.js Anda sudah sesuai.
 
 ---
 

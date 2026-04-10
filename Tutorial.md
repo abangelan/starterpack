@@ -7,15 +7,16 @@
 ## 📋 Daftar Isi
 
 1. [Requirement / Kebutuhan Sistem](#-1-requirement--kebutuhan-sistem)
-2. [Struktur Proyek](#-2-struktur-proyek)
-3. [Konfigurasi Database](#-3-konfigurasi-database)
-4. [Instalasi Backend (Laravel)](#-4-instalasi-backend-laravel)
-5. [Instalasi Frontend (React)](#-5-instalasi-frontend-react)
-6. [Menjalankan Aplikasi](#-6-menjalankan-aplikasi)
-7. [Login Pertama Kali](#-7-login-pertama-kali)
-8. [Fitur yang Tersedia](#-8-fitur-yang-tersedia)
-9. [Panduan Pengembangan Lanjutan](#-9-panduan-pengembangan-lanjutan)
-10. [Troubleshooting](#-10-troubleshooting)
+2. [Cara Cepat Menggunakan (Clone Repo)](#-2-cara-cepat-menggunakan-clone-repo)
+3. [Struktur Proyek](#-3-struktur-proyek)
+4. [Konfigurasi Database](#-4-konfigurasi-database)
+5. [Instalasi Backend (Laravel)](#-5-instalasi-backend-laravel)
+6. [Instalasi Frontend (React)](#-6-instalasi-frontend-react)
+7. [Menjalankan Aplikasi](#-7-menjalankan-aplikasi)
+8. [Login Pertama Kali](#-8-login-pertama-kali)
+9. [Fitur yang Tersedia](#-9-fitur-yang-tersedia)
+10. [Panduan Pengembangan Lanjutan](#-10-panduan-pengembangan-lanjutan)
+11. [Troubleshooting](#-11-troubleshooting)
 
 ---
 
@@ -47,42 +48,56 @@ npm -v          # 9.x atau lebih
 
 ---
 
-## 📁 2. Struktur Proyek
+## 🚀 2. Cara Cepat Menggunakan (Clone Repo)
 
+Jika Anda ingin langsung menggunakan StarterPack ini di komputer Anda, ikuti langkah-langkah berikut:
+
+### Langkah 1 – Clone Repository
+Buka Terminal/CMD Anda, lalu jalankan:
+```bash
+# Pastikan Anda berada di folder htdocs XAMPP
+cd /path/ke/htdocs
+
+# Clone repository
+git clone https://github.com/abangelan/starterpack.git
+
+# Masuk ke folder proyek
+cd starterpack
 ```
-starterpack/
-├── frontend/              ← React App (berjalan di port 3000)
-│   ├── src/
-│   │   ├── api/           ← Axios API calls
-│   │   ├── context/       ← AuthContext (state login global)
-│   │   ├── components/    ← UI Components (WowDash + custom)
-│   │   ├── pages/         ← Route pages
-│   │   └── helper/        ← PrivateRoute, utilities
-│   ├── .env               ← Konfigurasi URL API
-│   └── package.json
-│
-├── backend/               ← Laravel REST API
-│   ├── app/
-│   │   ├── Http/Controllers/Api/   ← Controller API
-│   │   ├── Models/                 ← Eloquent Models
-│   │   └── Exports/                ← Excel/PDF export class
-│   ├── database/
-│   │   ├── migrations/   ← Skema tabel database
-│   │   └── seeders/      ← Data awal (roles + user admin)
-│   ├── resources/views/exports/  ← Template PDF
-│   ├── routes/api.php    ← Definisi semua endpoint API
-│   ├── .env              ← Konfigurasi koneksi database
-│   └── composer.json
-│
-├── templates/             ← Source template WowDash (referensi)
-│   └── Tutorial.md        ← File ini
-│
-└── prd.md                 ← Product Requirements Document
+
+### Langkah 2 – Persiapan Backend
+```bash
+cd backend
+composer install
+cp .env.example .env
+php artisan key:generate
+```
+*Catatan: Sesuaikan detail database di `.env` sebelum lanjut ke migrasi.*
+
+### Langkah 3 – Persiapan Frontend
+```bash
+cd ../frontend
+npm install --legacy-peer-deps
+cp .env.example .env  # Pastikan file .env ada jika tersedia
 ```
 
 ---
 
-## 🗄️ 3. Konfigurasi Database
+## 📁 3. Struktur Proyek
+
+Setelah Anda melakukan clone, folder utama proyek akan memiliki struktur sebagai berikut:
+
+```
+starterpack/
+├── frontend/              ← React App (berjalan di port 3000)
+├── backend/               ← Laravel REST API
+├── prd.md                 ← Product Requirements Document
+└── Tutorial.md            ← File Panduan Lengkap (File ini)
+```
+
+---
+
+## 🗄️ 4. Konfigurasi Database
 
 ### Langkah 1 – Aktifkan XAMPP
 
@@ -114,7 +129,7 @@ EXIT;
 
 ---
 
-## 🔧 4. Instalasi Backend (Laravel)
+## 🔧 5. Instalasi Backend (Laravel)
 
 ### Langkah 1 – Salin folder ke htdocs
 
@@ -188,7 +203,7 @@ Output yang diharapkan:
 
 ---
 
-## ⚛️ 5. Instalasi Frontend (React)
+## ⚛️ 6. Instalasi Frontend (React)
 
 ### Langkah 1 – Masuk ke folder `frontend/`
 
@@ -221,7 +236,7 @@ REACT_APP_API_URL=http://localhost/starterpack/backend/public/api
 
 ---
 
-## ▶️ 6. Menjalankan Aplikasi
+## ▶️ 7. Menjalankan Aplikasi
 
 ### Jalankan Backend
 
@@ -255,7 +270,7 @@ Jika tidak otomatis, buka manual di browser.
 
 ---
 
-## 🔑 7. Login Pertama Kali
+## 🔑 8. Login Pertama Kali
 
 1. Buka browser → **`http://localhost:3000`**
 2. Akan otomatis redirect ke halaman **Sign In**
@@ -282,7 +297,7 @@ Jika tidak otomatis, buka manual di browser.
 
 ---
 
-## ✨ 8. Fitur yang Tersedia
+## ✨ 9. Fitur yang Tersedia
 
 ### 🏠 Dashboard
 - 11 variasi tampilan dashboard (tersedia di menu sidebar)
@@ -325,7 +340,7 @@ Jika tidak otomatis, buka manual di browser.
 
 ---
 
-## 🛠️ 9. Panduan Pengembangan Lanjutan
+## 🛠️ 10. Panduan Pengembangan Lanjutan
 
 ### Menambah Halaman Baru
 
@@ -438,7 +453,7 @@ Edit `backend/config/cors.php`:
 
 ---
 
-## 🐛 10. Troubleshooting
+## 🐛 11. Troubleshooting
 
 ### ❌ `Failed to compile` — Module not found: axios
 ```bash
