@@ -52,8 +52,31 @@ npm -v          # 9.x atau lebih
 ```
 starterpack/
 ├── frontend/              ← React App (berjalan di port 3000)
+│   ├── src/
+│   │   ├── api/           ← Axios API calls
+│   │   ├── context/       ← AuthContext (state login global)
+│   │   ├── components/    ← UI Components (WowDash + custom)
+│   │   ├── pages/         ← Route pages
+│   │   └── helper/        ← PrivateRoute, utilities
+│   ├── .env               ← Konfigurasi URL API
+│   └── package.json
+│
 ├── backend/               ← Laravel REST API
-├── Tutorial.md            ← File Panduan Lengkap
+│   ├── app/
+│   │   ├── Http/Controllers/Api/   ← Controller API
+│   │   ├── Models/                 ← Eloquent Models
+│   │   └── Exports/                ← Excel/PDF export class
+│   ├── database/
+│   │   ├── migrations/   ← Skema tabel database
+│   │   └── seeders/      ← Data awal (roles + user admin)
+│   ├── resources/views/exports/  ← Template PDF
+│   ├── routes/api.php    ← Definisi semua endpoint API
+│   ├── .env              ← Konfigurasi koneksi database
+│   └── composer.json
+│
+├── templates/             ← Source template WowDash (referensi)
+│   └── Tutorial.md        ← File ini
+│
 └── prd.md                 ← Product Requirements Document
 ```
 
@@ -423,20 +446,136 @@ cd frontend
 npm install axios --legacy-peer-deps
 ```
 
+### ❌ `CORS error` di browser console
+Pastikan di `backend/config/cors.php`:
+```php
+'allowed_origins' => ['http://localhost:3000'],
+'supports_credentials' => true,
+```
+Dan di `backend/.env`:
+```env
+SANCTUM_STATEFUL_DOMAINS=localhost:3000,localhost
+```
+
+### ❌ `404 Not Found` pada Endpoint API
+Jika login mengembalikan error 404, pastikan API routes sudah diaktifkan di **`backend/bootstrap/app.php`**:
+```php
+->withRouting(
+    web: __DIR__.'/../routes/web.php',
+    api: __DIR__.'/../routes/api.php', // Pastikan baris ini ada
+    commands: __DIR__.'/../routes/console.php',
+    health: '/up',
+)
+```
+
+### ❌ `Fatal error: Composer detected issues... PHP version >= 8.4.0`
+Ini terjadi karena XAMPP Apache Anda menggunakan PHP versi lama (misalnya 7.4). 
+**Solusinya**: Gunakan `php artisan serve` dengan PHP versi terbaru:
+1. Jalankan: `php artisan serve --port=8000`.
+2. Update `REACT_APP_API_URL` di `frontend/.env` ke `http://localhost:8000/api`.
+
+### ❌ `401 Unauthorized` saat login
+- Pastikan database `starterpack_db` sudah dibuat
+- Jalankan: `php artisan migrate && php artisan db:seed`
+- Cek konfigurasi `DB_*` di `backend/.env`
+
+### ❌ API tidak bisa diakses / `502 Bad Gateway`
+- Pastikan XAMPP **Apache** sudah aktif
+- Cek URL di `frontend/.env` sudah benar
+- Pastikan folder `backend/` ada di dalam `htdocs/starterpack/`
+
+### ❌ Export Excel / PDF gagal
+```bash
+cd backend
+composer require maatwebsite/excel barryvdh/laravel-dompdf
+php artisan vendor:publish --provider="Maatwebsite\Excel\ExcelServiceProvider" --tag=config
+php artisan vendor:publish --provider="Barryvdh\DomPDF\ServiceProvider"
+```
+
+### ❌ `npm install` error peer dependency
+```bash
+npm install --legacy-peer-deps
+```
+
+### ❌ Blank page / halaman kosong
+Buka DevTools browser (F12) → tab **Console**:
+- `Network Error` → Cek backend running & URL `.env` benar
+- `Cannot read property of undefined` → Format response API mungkin berbeda
+- `Unexpected token` → Biasanya response bukan JSON (cek URL backend)
+
+### ❌ `php artisan` tidak ditemukan di PATH (macOS)
+```bash
+# Gunakan PHP dari XAMPP langsung
+/Applications/XAMPP/xamppfiles/bin/php artisan migrate
+
+# Atau tambahkan ke PATH (di ~/.zshrc atau ~/.bash_profile):
+export PATH="/Applications/XAMPP/xamppfiles/bin:$PATH"
+```
+
+### ❌ `php artisan` tidak ditemukan di PATH (Windows)
+Tambahkan path PHP XAMPP ke Environment Variables:
+```
+C:\xampp\php
+```
+Atau gunakan langsung:
+```cmd
+C:\xampp\php\php.exe artisan migrate
+```
+
 ---
 
 ## 📌 Quick Reference – Perintah Penting
 
 ```bash
 # ============ BACKEND ============
+
+# Install dependency (setelah clone/copy)
+composer install
+
+# Generate app key (WAJIB di komputer baru)
+php artisan key:generate
+
+# Buat semua tabel
+php artisan migrate
+
+# Reset semua tabel + isi data awal
 php artisan migrate:fresh --seed
+
+# Hanya isi data awal (tanpa reset)
+php artisan db:seed
+
+# Jalankan server development (port 8000)
 php artisan serve --port=8000
 
+# Clear semua cache
+php artisan config:clear && php artisan cache:clear && php artisan route:clear
+
 # ============ FRONTEND ============
+
+# Install dependency (setelah clone/copy)
 npm install --legacy-peer-deps
+
+# Jalankan development server (port 3000)
 npm start
+
+# Build untuk production
+npm run build
 ```
 
 ---
 
+## 📞 Informasi Proyek
+
+| Item | Detail |
+|------|--------|
+| **Frontend** | React 18 + WowDash Admin Template |
+| **Backend** | Laravel 13 + Sanctum |
+| **Database** | MySQL (via XAMPP) |
+| **Export Excel** | maatwebsite/excel v3.1 |
+| **Export PDF** | barryvdh/laravel-dompdf v3.1 |
+| **Auth** | Sanctum Personal Access Token |
+| **PHP Minimum** | 8.3+ |
+| **Node Minimum** | 18.x LTS |
+
+---
 Terima kasih salam, Abang Elan
